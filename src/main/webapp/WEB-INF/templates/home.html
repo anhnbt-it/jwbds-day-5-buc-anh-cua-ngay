@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Buc Anh Cua Ngay</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+</head>
+<body>
+<div class="container mt-3">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-5"><p id="nasa"></p></div>
+                <div class="col-md-7">
+                    <form th:action="@{/home}" th:object="${comment}" method="post">
+                        <div class="row mb-3">
+                            <label class="col-form-label col-md-2">Rating</label>
+                            <div class="col-md-10">
+                                <select class="form-control" th:field="*{rating}">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-form-label col-md-2">Author</label>
+                            <div class="col-md-10">
+                                <input type="text" th:field="*{author}" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-form-label col-md-2">Feedback</label>
+                            <div class="col-md-10">
+                                <textarea th:field="*{message}" rows="5" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-10 offset-2">
+                                <button type="submit" class="btn btn-primary">Comment</button>
+                            </div>
+                        </div>
+                    </form>
+                </div><!-- /.col-md-7 -->
+            </div><!-- /.row -->
+            <div class="row">
+                <div class="col-md-12">
+                    <ul th:each="c: ${comments}">
+                        <li>
+                            <span th:text="'+' + *{c.rating}"></span>
+                            <strong th:text="*{c.getAuthor()}"></strong>:
+                            <span th:text="*{c.message}"></span> <br>
+                            <span th:text="*{c.likeCount} ? *{c.likeCount} + ' likes' : '0 like'"></span>
+                            <a th:href="@{/home/like/{id}(id=${c.id})}" class="btn btn-secondary">Like</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    let apiURL = "https://api.nasa.gov/planetary/apod?api_key=OxbkW48yvaTGUmeVrHcHJvycRC4QXaeeNgolgqZo";
+    let request = new XMLHttpRequest();
+    request.open('GET', apiURL);
+    request.onload = function () {
+        if (request.status === 200) {
+            let response = JSON.parse(request.responseText);
+            console.log(response);
+            if (response.media_type == 'image') {
+                document.getElementById("nasa").innerHTML = '<img class="img-fluid" src="' + response.url + '" alt="' + response.title + '">';
+            } else {
+                document.getElementById("nasa").innerHTML = '<iframe width="420" height="345" src="' + response.url + '">\n' +
+                    '</iframe>';
+            }
+        }
+    }
+    request.send();
+</script>
+</body>
+</html>
