@@ -12,7 +12,7 @@ public interface CommentSvc {
 
     Comment update(Comment comment);
 
-    void like(Long id);
+    Comment like(Long id);
 
     Comment findById(Long id);
 }

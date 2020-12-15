@@ -15,7 +15,12 @@ public class Comment implements Serializable {
     private Integer likeCount;
 
     public Comment() {
+    }
 
+    public Comment(Short rating, String author, String message) {
+        this.rating = rating;
+        this.author = author;
+        this.message = message;
     }
 
     public Comment(Long id, Short rating, String author, String message, Integer likeCount) {

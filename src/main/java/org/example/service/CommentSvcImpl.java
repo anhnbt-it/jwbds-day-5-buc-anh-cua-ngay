@@ -78,7 +78,7 @@ public class CommentSvcImpl implements CommentSvc {
     }
 
     @Override
-    public void like(Long id) {
+    public Comment like(Long id) {
         Session session = null;
         Transaction transaction = null;
         try {
@@ -88,6 +88,7 @@ public class CommentSvcImpl implements CommentSvc {
             comment.setLikeCount(comment.getLikeCount()+1);
             session.saveOrUpdate(comment);
             transaction.commit();
+            return comment;
         } catch (Exception ex) {
             ex.printStackTrace();
             if (transaction != null) {
@@ -98,6 +99,7 @@ public class CommentSvcImpl implements CommentSvc {
                 session.close();
             }
         }
+        return null;
     }
 
     @Override
